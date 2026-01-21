@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cycle Flow</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div id="app">
+        <h1>Cycle Tracker</h1>
+        <div class="input-group">
+            <label for="start-date">Last Period Start:</label>
+            <input type="date" id="start-date">
+            <button onclick="saveDate()">Log Period</button>
+        </div>
+        <div id="prediction">
+            Next Period: <span id="next-date">--</span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Registers the service worker for offline use
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
