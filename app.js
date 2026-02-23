@@ -67,8 +67,9 @@ function renderWeek() {
         let statusClasses = getStatusClasses(day, dateKey, cd);
 
         // Put the numbers into the Day Box
+        // We add a new "today-bold" class if isToday is true
         dayCell.innerHTML = `
-            <span class="day-number ${statusClasses}">${day.getDate()}</span>
+            <span class="day-number ${statusClasses} ${isToday ? 'today-bold' : ''}">${day.getDate()}</span>
             <span class="cycle-day">${cd > 0 ? cd : ''}</span>
         `;
         
@@ -196,4 +197,5 @@ function downloadBackup() {
     a.download = `cycle_backup.json`;
     a.click();
 }
+
 
