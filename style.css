@@ -95,25 +95,30 @@ select.active, input.active {
     background-color: #fff0f3;
 }
 
-.sync-section {
+.backup-section {
     margin-top: 30px;
     padding: 15px;
-    background: #f9f9f9;
-    border-radius: 12px;
-    text-align: center;
-    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-#sync-status span {
-    color: #888;
-    font-weight: bold;
+.backup-btn, .analytics-btn {
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #ddd;
 }
 
-#auth-btn {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background: #4285F4;
-    color: white;
-    border: none;
-    border-radius: 5px;
+.backup-btn {
+    background-color: #f8f9fa;
+    color: #444;
+}
+
+.analytics-btn {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-color: #c8e6c9;
 }
