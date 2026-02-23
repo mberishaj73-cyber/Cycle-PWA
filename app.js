@@ -78,4 +78,62 @@ function changeWeek(dir) {
     renderWeek();
 }
 
+function updateStatus() {
+    const dateKey = selectedDate.toISOString().split('T')[0];
+    const log = userData.dailyLogs[dateKey] || {};
+    const cd = calculateCycleDay(selectedDate);
+    
+    // 1. To Do Logic
+    let todo = "None";
+    let isFertile = document.querySelector('.day-cell.selected .fertile-number');
+    let ovDate = findEstimatedOvulation();
+    
+    if (isFertile) todo = "Test Lh";
+    
+    // PdG Logic: 3 days after ovulation
+    if (ovDate) {
+        let diff = Math.floor((selectedDate - ovDate) / 86400000);
+        if (diff >= 3 && !hasThreePositivePdg()) {
+            todo = "Test PdG";
+        }
+    }
+    document.getElementById('todo-item').innerText = todo;
+
+    // 2. Prediction Logic
+    let pred = "--";
+    if (ovDate) {
+        let diff = Math.floor((ovDate - selectedDate) / 86400000);
+        if (diff > 0) pred = `Ovulation in ${diff} days`;
+        else {
+            let periodDiff = 14 + diff; // Simple 14 day luteal phase
+            pred = `Period in ${periodDiff} days`;
+        }
+    }
+    document.getElementById('prediction-text').innerText = pred;
+
+    // Update Input Values in UI
+    document.getElementById('temp-input').value = log.temp || '';
+    document.getElementById('cm-select').value = log.cm || 'none';
+}
+
+function logVal(field, val) {
+    const key = selectedDate.toISOString().split('T')[0];
+    if (!userData.dailyLogs[key]) userData.dailyLogs[key] = {};
+    userData.dailyLogs[key][field] = val;
+    localStorage.setItem('cycleData', JSON.stringify(userData));
+    renderWeek();
+    updateStatus();
+}
+
+function hasThreePositivePdg() {
+    // Logic to scan last 3 days for 'pos' PdG
+    return false; // Placeholder
+}
+
+function findEstimatedOvulation() {
+    // Logic to find the CD14 or LH Peak
+    return null; // Placeholder
+}
+
 window.onload = renderWeek;
+
