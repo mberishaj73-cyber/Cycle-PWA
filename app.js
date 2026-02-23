@@ -98,8 +98,9 @@ function updateStatus() {
     document.querySelectorAll('.btn-group button').forEach(btn => btn.classList.remove('active'));
 
     // 1. Light up the buttons based on saved data
-    if (log.period === true) document.querySelector('button[onclick*="period\', true"]').classList.add('active');
-    if (log.period === false) document.querySelector('button[onclick*="period\', false"]').classList.add('active');
+    // Inside updateStatus() in app.js
+    if (log.period === 'yes') document.querySelector('button[onclick*="period\', \'yes\'"]').classList.add('active');
+    if (log.period === 'no') document.querySelector('button[onclick*="period\', \'no\'"]').classList.add('active');
 
     if (log.lh === 'pos') document.querySelector('button[onclick*="lh\', \'pos\'"]').classList.add('active');
     if (log.lh === 'neg') document.querySelector('button[onclick*="lh\', \'neg\'"]').classList.add('active');
@@ -187,6 +188,7 @@ function findEstimatedOvulation() {
 }
 
 window.onload = renderWeek;
+
 
 
 
