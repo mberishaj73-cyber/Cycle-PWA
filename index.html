@@ -8,6 +8,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <div id="app">
@@ -84,6 +85,11 @@
                 </div>
             </div>
         </section>
+
+        <div class="sync-section">
+            <p id="sync-status">Cloud Sync: <span>Disconnected</span></p>
+            <button id="auth-btn" onclick="handleAuthClick()">Connect Google Drive</button>
+        </div>
     </div>
 
     <script src="app.js"></script>
@@ -96,6 +102,7 @@
     </script>
 </body>
 </html>
+
 
 
 
