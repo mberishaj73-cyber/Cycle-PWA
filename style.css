@@ -1,29 +1,87 @@
+/* --- VARIABLES --- */
+/* These allow you to change a color in one place and have it update everywhere */
 :root {
-    --dark-pink: #d63384;
-    --soft-pink: #ff85a2;
-    --fertile-blue: #007bff;
-    --light-grey: #e9ecef;
+    --dark-pink: #d63384;    /* Used for confirmed periods */
+    --soft-pink: #ff85a2;    /* Used for headers and borders */
+    --fertile-blue: #007bff; /* Used for ovulation and fertility markers */
+    --light-grey: #e9ecef;   /* Used for the selection highlight */
 }
 
-body { font-family: -apple-system, sans-serif; background: #fff5f7; margin: 0; display: flex; justify-content: center; }
+/* --- BASE LAYOUT --- */
+body { 
+    font-family: -apple-system, sans-serif; /* Uses the clean iPhone system font */
+    background: #fff5f7;                   /* Very light pink background for the whole screen */
+    margin: 0; 
+    display: flex; 
+    justify-content: center; 
+}
 
-#app { width: 100%; max-width: 400px; background: white; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+#app { 
+    width: 100%; 
+    max-width: 400px;        /* Limits width so it looks like a phone app on a desktop */
+    background: white; 
+    min-height: 100vh;       /* Ensures the white background fills the whole height */
+    padding: 20px; 
+    box-sizing: border-box;  /* Prevents padding from making the box wider than 100% */
+}
 
-.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.nav-btn { background: none; border: none; font-size: 1.5rem; color: var(--soft-pink); cursor: pointer; }
+/* --- CALENDAR TOP --- */
+.calendar-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 10px; 
+}
 
-.days-header { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; color: #888; font-size: 0.8rem; margin-bottom: 5px; }
+.nav-btn { 
+    background: none; 
+    border: none; 
+    font-size: 1.5rem; 
+    color: var(--soft-pink); 
+    cursor: pointer; 
+}
 
-.week-container { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+/* --- GRID SYSTEM --- */
+/* Creates 7 equal columns for the days of the week */
+.days-header { 
+    display: grid; 
+    grid-template-columns: repeat(7, 1fr); 
+    text-align: center; 
+    font-weight: bold; 
+    color: #888; 
+    font-size: 0.8rem; 
+    margin-bottom: 5px; 
+}
 
-.day-cell { display: flex; flex-direction: column; align-items: center; padding: 10px 0; border-radius: 10px; }
+.week-container { 
+    display: grid; 
+    grid-template-columns: repeat(7, 1fr); 
+    text-align: center; 
+}
 
-.day-number { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; position: relative; }
+.day-cell { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 10px 0; 
+    border-radius: 10px; 
+}
+
+/* --- DATE CIRCLES --- */
+.day-number { 
+    width: 35px; 
+    height: 35px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 50%;      /* Makes the background a perfect circle */
+    position: relative; 
+}
 
 .bold { font-weight: 800; }
 .selected { background-color: var(--light-grey); }
 
-/* Circle Styles */
+/* --- STATUS INDICATORS --- */
 .predicted-ovulation { border: 2px dashed var(--fertile-blue); }
 .confirmed-ovulation { background-color: var(--fertile-blue); color: white; }
 .predicted-period { border: 2px dashed var(--dark-pink); }
@@ -32,14 +90,13 @@ body { font-family: -apple-system, sans-serif; background: #fff5f7; margin: 0; d
 
 .cycle-day { font-size: 0.6rem; color: #aaa; margin-top: 2px; }
 
-.log-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-.log-btn { padding: 12px; border: 1px solid #eee; border-radius: 10px; background: white; cursor: pointer; }
+/* --- LOGGING SECTION --- */
 .action-card {
     background: white;
     padding: 15px;
     border-radius: 15px;
     margin-top: 15px;
-    border: 1px solid var(--soft-pink);
+    border: 1px solid var(--soft-pink); /* Pink border to match the theme */
     text-align: left;
     font-size: 0.9rem;
 }
@@ -60,6 +117,7 @@ body { font-family: -apple-system, sans-serif; background: #fff5f7; margin: 0; d
     border-radius: 10px;
 }
 
+/* --- BUTTONS & INPUTS --- */
 .btn-group { display: flex; gap: 5px; }
 
 .btn-group button {
@@ -70,10 +128,14 @@ body { font-family: -apple-system, sans-serif; background: #fff5f7; margin: 0; d
     background: #f9f9f9;
 }
 
+/* THE ACTIVE BUTTON STYLE:
+   Your code currently has this set to dark grey (#555).
+   If you want it pink again, you would change this color. */
 .btn-group button.active {
-    background: var(--soft-pink);
-    color: white;
-    border-color: var(--soft-pink);
+    background-color: #555 !important; 
+    color: white !important;
+    border-color: #333;
+    font-weight: bold;
 }
 
 input[type="number"] {
@@ -82,19 +144,8 @@ input[type="number"] {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
-.btn-group button.active {
-    background-color: #555 !important; /* Dark grey */
-    color: white !important;
-    border-color: #333;
-    font-weight: bold;
-}
 
-/* Also for the select dropdown and input to look consistent */
-select.active, input.active {
-    border: 2px solid var(--soft-pink);
-    background-color: #fff0f3;
-}
-
+/* --- EXPORT SECTION --- */
 .backup-section {
     margin-top: 30px;
     padding: 15px;
@@ -113,12 +164,12 @@ select.active, input.active {
 }
 
 .backup-btn {
-    background-color: #f8f9fa;
+    background-color: #f8f9fa; /* Light grey for the technical button */
     color: #444;
 }
 
 .analytics-btn {
-    background-color: #e8f5e9;
+    background-color: #e8f5e9; /* Light green for the Excel/CSV button */
     color: #2e7d32;
     border-color: #c8e6c9;
 }
