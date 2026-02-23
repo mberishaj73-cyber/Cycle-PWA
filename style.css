@@ -94,3 +94,26 @@ select.active, input.active {
     border: 2px solid var(--soft-pink);
     background-color: #fff0f3;
 }
+
+.sync-section {
+    margin-top: 30px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+#sync-status span {
+    color: #888;
+    font-weight: bold;
+}
+
+#auth-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: #4285F4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
