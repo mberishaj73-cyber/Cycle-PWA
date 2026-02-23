@@ -158,10 +158,12 @@ function findLhPeakDay() {
 function logVal(field, val) {
     const key = selectedDate.toISOString().split('T')[0];
     if (!userData.dailyLogs[key]) userData.dailyLogs[key] = {};
+    
     userData.dailyLogs[key][field] = val;
     localStorage.setItem('cycleData', JSON.stringify(userData));
-    renderWeek();
-    updateStatus();
+    
+    renderWeek();   // Refreshes the calendar circles
+    updateStatus(); // Refreshes the button colors
 }
 
 function hasThreePositivePdg() {
@@ -175,6 +177,7 @@ function findEstimatedOvulation() {
 }
 
 window.onload = renderWeek;
+
 
 
 
