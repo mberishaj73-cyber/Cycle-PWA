@@ -34,3 +34,51 @@ body { font-family: -apple-system, sans-serif; background: #fff5f7; margin: 0; d
 
 .log-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
 .log-btn { padding: 12px; border: 1px solid #eee; border-radius: 10px; background: white; cursor: pointer; }
+.action-card {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    margin-top: 15px;
+    border: 1px solid var(--soft-pink);
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.log-container {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.log-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.btn-group { display: flex; gap: 5px; }
+
+.btn-group button {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+.btn-group button.active {
+    background: var(--soft-pink);
+    color: white;
+    border-color: var(--soft-pink);
+}
+
+input[type="number"] {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
