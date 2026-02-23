@@ -1,0 +1,44 @@
+:root {
+    --dark-pink: #d63384;
+    --fertile-blue: #007bff;
+    --light-grey: #e9ecef;
+}
+
+/* Calendar Week View */
+.week-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.day-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.day-letter { font-size: 0.7rem; color: #888; text-transform: uppercase; }
+.today-label { font-size: 0.6rem; color: var(--dark-pink); font-weight: 800; }
+.day-number { 
+    font-size: 1.1rem; 
+    width: 30px; 
+    height: 30px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 50%;
+    margin: 5px 0;
+}
+.cycle-day { font-size: 0.6rem; color: #aaa; }
+
+/* Status Styles */
+.selected { background-color: var(--light-grey); }
+.fertile { color: var(--fertile-blue); font-weight: bold; }
+.predicted-ovulation { border: 2px dashed var(--fertile-blue); }
+.confirmed-ovulation { background-color: var(--fertile-blue); color: white; }
+.predicted-period { border: 2px dashed var(--dark-pink); }
+.confirmed-period { background-color: var(--dark-pink); color: white; }
