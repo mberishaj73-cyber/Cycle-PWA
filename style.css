@@ -82,3 +82,15 @@ input[type="number"] {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+.btn-group button.active {
+    background-color: #555 !important; /* Dark grey */
+    color: white !important;
+    border-color: #333;
+    font-weight: bold;
+}
+
+/* Also for the select dropdown and input to look consistent */
+select.active, input.active {
+    border: 2px solid var(--soft-pink);
+    background-color: #fff0f3;
+}
