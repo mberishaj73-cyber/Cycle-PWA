@@ -1,79 +1,12 @@
-// 1. Configuration (Use your actual ID from Google Console)
-const CLIENT_ID = '820836930929-cf5i8cqness3pso17ur404d755qsm4nj.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/drive.appdata';
-
-let tokenClient;
-let accessToken = null;
-
-// 2. Initialize Google Auth when the page loads
-window.onload = () => {
-    console.log("App and Google Script loading...");
-    
-    // Start the Calendar
-    renderWeek();
-    updateStatus();
-
-    try {
-        tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: CLIENT_ID,
-            scope: SCOPES,
-            callback: (tokenResponse) => {
-                if (tokenResponse.error !== undefined) {
-                    throw (tokenResponse);
-                }
-                accessToken = tokenResponse.access_token;
-                document.getElementById('sync-status').innerHTML = "Cloud Sync: <span>Active</span>";
-                document.getElementById('auth-btn').style.display = "none";
-                saveToDrive(); 
-            },
-        });
-        console.log("Google Auth Initialized");
-    } catch (err) {
-        console.error("Google Auth failed to load:", err);
-    }
-};
-
-// 3. The Login Trigger
-function handleAuthClick() {
-    tokenClient.requestAccessToken({prompt: 'consent'});
-}
-
-// 4. The Sync Logic
-async function saveToDrive() {
-    if (!accessToken) return;
-
-    const metadata = {
-        name: 'cycle_data_backup.json',
-        parents: ['appDataFolder']
-    };
-
-    const data = localStorage.getItem('cycleData');
-    if (!data) return; // Don't sync if there is no data yet
-
-    const file = new Blob([data], {type: 'application/json'});
-    const form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
-    form.append('file', file);
-
-    try {
-        const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-            method: 'POST',
-            headers: new Headers({'Authorization': 'Bearer ' + accessToken}),
-            body: form
-        });
-        
-        if (response.ok) {
-            const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('sync-status').innerHTML = `Cloud Sync: <span>Updated ${now}</span>`;
-        }
-    } catch (err) {
-        console.error("Sync failed", err);
-    }
-}
-
 let currentViewDate = new Date();
 let selectedDate = new Date();
 let userData = JSON.parse(localStorage.getItem('cycleData')) || { dailyLogs: {}, history: [] };
+
+// Initialize the app
+window.onload = () => {
+    renderWeek();
+    updateStatus();
+};
 
 function renderWeek() {
     const grid = document.getElementById('week-grid');
@@ -82,28 +15,21 @@ function renderWeek() {
     
     grid.innerHTML = '';
 
-    // 1. Update the Month/Year at the very top
     let startOfWeek = new Date(currentViewDate);
     startOfWeek.setDate(currentViewDate.getDate() - currentViewDate.getDay());
     monthDisplay.innerText = startOfWeek.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-    // 2. Update the "Friday, February 27" display for the SELECTED day
     const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
     dateDisplay.innerText = selectedDate.toLocaleDateString('en-US', dateOptions);
 
-    // 3. Draw the week
     for (let i = 0; i < 7; i++) {
         let day = new Date(startOfWeek);
         day.setDate(startOfWeek.getDate() + i);
         const dateKey = day.toISOString().split('T')[0];
-        
-        const isToday = day.toDateString() === new Date().toDateString();
         const isSelected = day.toDateString() === selectedDate.toDateString();
         
         const dayCell = document.createElement('div');
         dayCell.className = `day-cell ${isSelected ? 'selected' : ''}`;
-        
-        // This makes the date change when you click
         dayCell.onclick = () => { 
             selectedDate = new Date(day); 
             renderWeek(); 
@@ -111,10 +37,8 @@ function renderWeek() {
         };
 
         let cd = calculateCycleDay(day);
-        let statusClasses = getStatusClasses(day, dateKey, cd);
-
         dayCell.innerHTML = `
-            <span class="day-number ${isToday ? 'bold' : ''} ${statusClasses}">${day.getDate()}</span>
+            <span class="day-number">${day.getDate()}</span>
             <span class="cycle-day">${cd > 0 ? cd : ''}</span>
         `;
         grid.appendChild(dayCell);
@@ -247,8 +171,7 @@ function logVal(field, val) {
     localStorage.setItem('cycleData', JSON.stringify(userData));
     
     renderWeek();   
-    updateStatus(); 
-    saveToDrive();
+    updateStatus();
 }
 
 function hasThreePositivePdg() {
@@ -259,4 +182,38 @@ function hasThreePositivePdg() {
 function findEstimatedOvulation() {
     // Logic to find the CD14 or LH Peak
     return null; // Placeholder
+}
+
+// NEW ANALYTICS EXPORT (CSV)
+function downloadCSV() {
+    const logs = userData.dailyLogs;
+    if (Object.keys(logs).length === 0) return alert("No data yet!");
+
+    const headers = ["Date", "Period", "LH", "Clearblue", "PdG", "Temp", "CM"];
+    let csvRows = [headers.join(",")];
+    const sortedDates = Object.keys(logs).sort();
+
+    for (const date of sortedDates) {
+        const d = logs[date];
+        csvRows.push([date, d.period||"", d.lh||"", d.cb||"", d.pdg||"", d.temp||"", d.cm||""].join(","));
+    }
+
+    const blob = new Blob([csvRows.join("\n")], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `cycle_analytics_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+}
+
+// NEW TECHNICAL BACKUP (JSON)
+function downloadBackup() {
+    const data = localStorage.getItem('cycleData');
+    if (!data) return alert("No data yet!");
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `cycle_backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
 }
