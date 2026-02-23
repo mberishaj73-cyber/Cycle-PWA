@@ -218,6 +218,7 @@ function logVal(field, val) {
     
     renderWeek();   
     updateStatus(); 
+    saveToDrive();
 }
 
 function hasThreePositivePdg() {
@@ -231,6 +232,7 @@ function findEstimatedOvulation() {
 }
 
 window.onload = renderWeek;
+
 
 
 
