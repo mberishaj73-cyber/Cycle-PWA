@@ -8,7 +8,6 @@
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <div id="app">
@@ -27,83 +26,23 @@
         <hr class="divider">
         
         <section id="day-details">
-            <div id="selected-date-display" class="date-header">
-            </div>
+            <div id="selected-date-display" class="date-header"></div>
             
             <div class="action-card">
-                <p><strong>To Do:</strong> <span id="todo-item">None</span></p>
-                <p><strong>Prediction:</strong> <span id="prediction-text">--</span></p>
+                <p>To Do: <span id="todo-item">None</span></p>
+                <p>Prediction: <span id="prediction-text">--</span></p>
             </div>
         
             <div class="log-container">
-                <div class="log-row">
-                    <span>Period:</span>
-                    <div class="btn-group">
-                        <button onclick="logVal('period', 'yes')">Yes</button>
-                        <button onclick="logVal('period', 'no')">No</button>
-                    </div>
                 </div>
-        
-                <div class="log-row">
-                    <span>Lh Test:</span>
-                    <div class="btn-group">
-                        <button onclick="logVal('lh', 'pos')">Pos</button>
-                        <button onclick="logVal('lh', 'neg')">Neg</button>
-                    </div>
-                </div>
-        
-                <div class="log-row">
-                    <span>Clearblue:</span>
-                    <div class="btn-group">
-                        <button onclick="logVal('cb', 'none')">◯</button>
-                        <button onclick="logVal('cb', 'peak')">☺</button>
-                        <button onclick="logVal('cb', 'high')">☼</button>
-                    </div>
-                </div>
-        
-                <div class="log-row">
-                    <span>PdG:</span>
-                    <div class="btn-group">
-                        <button onclick="logVal('pdg', 'pos')">Pos</button>
-                        <button onclick="logVal('pdg', 'neg')">Neg</button>
-                    </div>
-                </div>
-        
-                <div class="log-row">
-                    <span>Temp:</span>
-                    <input type="number" id="temp-input" step="0.01" placeholder="98.60" onchange="logVal('temp', this.value)">
-                </div>
-        
-                <div class="log-row">
-                    <span>CM:</span>
-                    <select onchange="logVal('cm', this.value)" id="cm-select">
-                        <option value="none">None</option>
-                        <option value="watery">Watery</option>
-                        <option value="creamy">Creamy</option>
-                        <option value="spotting">Spotting</option>
-                    </select>
-                </div>
-            </div>
         </section>
 
-        <div class="sync-section">
-            <p id="sync-status">Cloud Sync: <span>Disconnected</span></p>
-            <button id="auth-btn" onclick="handleAuthClick()">Connect Google Drive</button>
+        <div class="backup-section">
+            <button class="backup-btn" onclick="downloadBackup()">Save Technical Backup (JSON)</button>
+            <button class="analytics-btn" onclick="downloadCSV()">Export for Excel (CSV)</button>
         </div>
     </div>
 
     <script src="app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js');
-            });
-        }
-    </script>
 </body>
 </html>
-
-
-
-
-
