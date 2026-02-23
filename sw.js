@@ -1,6 +1,6 @@
 // CACHE_NAME is like a version number for your app's memory. 
 // If you update your CSS or JS, changing this to 'v3' tells the phone to refresh everything.
-const CACHE_NAME = 'cycle-flow-v3';
+const CACHE_NAME = 'cycle-flow-v4';
 
 // ASSETS is the list of files the phone should "save" so the app works without internet.
 const ASSETS = [
@@ -49,4 +49,5 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
 
