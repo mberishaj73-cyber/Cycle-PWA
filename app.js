@@ -5,13 +5,20 @@ let userData = JSON.parse(localStorage.getItem('cycleData')) || { dailyLogs: {},
 function renderWeek() {
     const grid = document.getElementById('week-grid');
     const monthDisplay = document.getElementById('month-display');
+    const dateDisplay = document.getElementById('selected-date-display');
+    
     grid.innerHTML = '';
 
+    // 1. Update the Month/Year at the very top
     let startOfWeek = new Date(currentViewDate);
     startOfWeek.setDate(currentViewDate.getDate() - currentViewDate.getDay());
-
     monthDisplay.innerText = startOfWeek.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
+    // 2. Update the "Friday, February 27" display for the SELECTED day
+    const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+    dateDisplay.innerText = selectedDate.toLocaleDateString('en-US', dateOptions);
+
+    // 3. Draw the week
     for (let i = 0; i < 7; i++) {
         let day = new Date(startOfWeek);
         day.setDate(startOfWeek.getDate() + i);
@@ -22,7 +29,13 @@ function renderWeek() {
         
         const dayCell = document.createElement('div');
         dayCell.className = `day-cell ${isSelected ? 'selected' : ''}`;
-        dayCell.onclick = () => { selectedDate = new Date(day); renderWeek(); };
+        
+        // This makes the date change when you click
+        dayCell.onclick = () => { 
+            selectedDate = new Date(day); 
+            renderWeek(); 
+            updateStatus(); 
+        };
 
         let cd = calculateCycleDay(day);
         let statusClasses = getStatusClasses(day, dateKey, cd);
@@ -33,7 +46,6 @@ function renderWeek() {
         `;
         grid.appendChild(dayCell);
     }
-    document.getElementById('selected-date-label').innerText = selectedDate.toDateString();
 }
 
 function calculateCycleDay(targetDate) {
@@ -136,4 +148,5 @@ function findEstimatedOvulation() {
 }
 
 window.onload = renderWeek;
+
 
