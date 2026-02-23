@@ -93,39 +93,68 @@ function changeWeek(dir) {
 function updateStatus() {
     const dateKey = selectedDate.toISOString().split('T')[0];
     const log = userData.dailyLogs[dateKey] || {};
-    const cd = calculateCycleDay(selectedDate);
     
-    // 1. To Do Logic
+    // 1. Calculate To-Do
     let todo = "None";
-    let isFertile = document.querySelector('.day-cell.selected .fertile-number');
-    let ovDate = findEstimatedOvulation();
-    
-    if (isFertile) todo = "Test Lh";
-    
-    // PdG Logic: 3 days after ovulation
-    if (ovDate) {
-        let diff = Math.floor((selectedDate - ovDate) / 86400000);
-        if (diff >= 3 && !hasThreePositivePdg()) {
+    const cd = calculateCycleDay(selectedDate);
+    const metrics = calculateMetrics();
+
+    // Check if it's a fertile day (Shortest - 20)
+    if (cd >= metrics.fertileStart && cd <= 17) {
+        todo = "Test Lh";
+    }
+
+    // Check for PdG: 3 days after suspected ovulation
+    const peakDay = findLhPeakDay();
+    if (peakDay) {
+        const daysSincePeak = Math.floor((selectedDate - peakDay) / 86400000);
+        if (daysSincePeak >= 2 && !hasThreePositivePdg()) {
             todo = "Test PdG";
         }
     }
+    
     document.getElementById('todo-item').innerText = todo;
 
     // 2. Prediction Logic
-    let pred = "--";
-    if (ovDate) {
-        let diff = Math.floor((ovDate - selectedDate) / 86400000);
-        if (diff > 0) pred = `Ovulation in ${diff} days`;
-        else {
-            let periodDiff = 14 + diff; // Simple 14 day luteal phase
-            pred = `Period in ${periodDiff} days`;
+    let prediction = "Data needed";
+    const cycleDay = calculateCycleDay(selectedDate);
+    
+    if (peakDay) {
+        const diff = Math.floor((selectedDate - peakDay) / 86400000);
+        if (diff < 1) prediction = `Ovulation in ${Math.abs(diff) + 1} days`;
+        else prediction = `Period in ${14 - diff} days`;
+    } else if (cycleDay > 0) {
+        prediction = `Ovulation expected CD14`;
+    }
+
+    document.getElementById('prediction-text').innerText = prediction;
+}
+
+// Helper: Scans logs for 3 consecutive positive PdG tests
+function hasThreePositivePdg() {
+    let count = 0;
+    const dates = Object.keys(userData.dailyLogs).sort();
+    for (let date of dates) {
+        if (userData.dailyLogs[date].pdg === 'pos') {
+            count++;
+            if (count >= 3) return true;
+        } else {
+            count = 0;
         }
     }
-    document.getElementById('prediction-text').innerText = pred;
+    return false;
+}
 
-    // Update Input Values in UI
-    document.getElementById('temp-input').value = log.temp || '';
-    document.getElementById('cm-select').value = log.cm || 'none';
+// Helper: Finds the date of the most recent LH positive
+function findLhPeakDay() {
+    let peak = null;
+    for (let date in userData.dailyLogs) {
+        if (userData.dailyLogs[date].lh === 'pos') {
+            const d = new Date(date);
+            if (!peak || d > peak) peak = d;
+        }
+    }
+    return peak;
 }
 
 function logVal(field, val) {
@@ -148,5 +177,6 @@ function findEstimatedOvulation() {
 }
 
 window.onload = renderWeek;
+
 
 
