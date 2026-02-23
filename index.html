@@ -2,30 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cycle Flow</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cycle Flow Pro</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <div id="app">
-        <h1>Cycle Tracker</h1>
-        <div class="input-group">
-            <label for="start-date">Last Period Start:</label>
-            <input type="date" id="start-date">
-            <button onclick="saveDate()">Log Period</button>
-        </div>
-        <div id="prediction">
-            Next Period: <span id="next-date">--</span>
-        </div>
-    </div>
+        <header class="calendar-header">
+            <button class="nav-btn" onclick="changeWeek(-1)">❮</button>
+            <h2 id="month-display">Month Year</h2>
+            <button class="nav-btn" onclick="changeWeek(1)">❯</button>
+        </header>
 
-    <script src="app.js"></script>
-    <script>
-        // Registers the service worker for offline use
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
-    </script>
-</body>
-</html>
+        <div id="week-grid" class="week-container">
+            </div>
+
+        <hr class="divider">
+
+        <section id="day-details">
+            <div class="selected-info">
+                <h3 id="selected-date-label">Select a day</h3>
+                <p id="status-text">Status: Normal</p>
+            </div>
+
+            <div class="log-grid">
+                <button class="log-btn period" onclick="logSymptom('period')">
+                    <span class="dot pink"></span> Period
+                </button>
+                <button class="log-btn lh" onclick="logSymptom('lh')">
+                    <span class="dot blue"></span> Positive LH
+                </button>
+                <button class="log-btn temp" onclick="logSymptom('temp')">
+                    <span class="dot orange"></span> Temp Rise
+                </button>
+                <button class="log
