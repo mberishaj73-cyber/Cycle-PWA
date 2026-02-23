@@ -177,6 +177,4 @@ input[type="number"] {
 /* This makes the number for the current real-world date stand out */
 .today-bold {
     font-weight: 900 !important; /* Extra thick font */
-    text-decoration: underline;  /* Adds an underline for extra clarity */
-    color: #000;                 /* Ensures it's solid black (or choose a color) */
 }
