@@ -1,44 +1,73 @@
+// 1. Configuration (Use your actual ID from Google Console)
 const CLIENT_ID = '820836930929-cf5i8cqness3pso17ur404d755qsm4nj.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/drive.appdata';
+
 let tokenClient;
 let accessToken = null;
 
+// 2. Initialize Google Auth when the page loads
 window.onload = () => {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: (tokenResponse) => {
-            accessToken = tokenResponse.access_token;
-            document.getElementById('sync-status').innerHTML = "Cloud Sync: <span>Active</span>";
-            document.getElementById('auth-btn').style.display = "none";
-            saveToDrive();
-        },
-    });
+    console.log("App and Google Script loading...");
+    
+    try {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: CLIENT_ID,
+            scope: SCOPES,
+            callback: (tokenResponse) => {
+                if (tokenResponse.error !== undefined) {
+                    throw (tokenResponse);
+                }
+                accessToken = tokenResponse.access_token;
+                document.getElementById('sync-status').innerHTML = "Cloud Sync: <span>Active</span>";
+                document.getElementById('auth-btn').style.display = "none";
+                saveToDrive(); 
+            },
+        });
+        console.log("Google Auth Initialized");
+    } catch (err) {
+        console.error("Google Auth failed to load:", err);
+    }
+    
+    // IF YOU HAVE OTHER window.onload LOGIC (like initCalendar), CALL IT HERE:
+    // initCalendar(); 
 };
 
+// 3. The Login Trigger
 function handleAuthClick() {
     tokenClient.requestAccessToken({prompt: 'consent'});
 }
 
+// 4. The Sync Logic
 async function saveToDrive() {
     if (!accessToken) return;
-    const metadata = { name: 'cycle_data_backup.json', parents: ['appDataFolder'] };
+
+    const metadata = {
+        name: 'cycle_data_backup.json',
+        parents: ['appDataFolder']
+    };
+
     const data = localStorage.getItem('cycleData');
+    if (!data) return; // Don't sync if there is no data yet
+
     const file = new Blob([data], {type: 'application/json'});
     const form = new FormData();
     form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
     form.append('file', file);
+
     try {
         const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
             method: 'POST',
             headers: new Headers({'Authorization': 'Bearer ' + accessToken}),
             body: form
         });
+        
         if (response.ok) {
             const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             document.getElementById('sync-status').innerHTML = `Cloud Sync: <span>Updated ${now}</span>`;
         }
-    } catch (err) { console.error("Sync failed", err); }
+    } catch (err) {
+        console.error("Sync failed", err);
+    }
 }
 
 let currentViewDate = new Date();
@@ -232,6 +261,7 @@ function findEstimatedOvulation() {
 }
 
 window.onload = renderWeek;
+
 
 
 
