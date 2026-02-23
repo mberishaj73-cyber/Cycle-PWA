@@ -1,10 +1,24 @@
 {
+  // The full name shown in the app store or installation prompts
   "name": "Cycle Flow Tracker",
+
+  // The shorter name that appears under the icon on your iPhone home screen
   "short_name": "CycleFlow",
+
+  // Tells the app to start at the main page when you open the icon
   "start_url": ".",
+
+  // 'standalone' makes it feel like a real app by hiding the Safari address bar 
+  // and navigation buttons at the bottom.
   "display": "standalone",
+
+  // The color of the splash screen that shows up while the app is loading
   "background_color": "#ffffff",
+
+  // The color of the status bar at the very top of your phone (where time/battery are)
   "theme_color": "#ff85a2",
+
+  // This tells the phone which image file to use for your Home Screen icon
   "icons": [
     {
       "src": "icon-192.png",
