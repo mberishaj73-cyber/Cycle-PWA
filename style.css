@@ -173,3 +173,10 @@ input[type="number"] {
     color: #2e7d32;
     border-color: #c8e6c9;
 }
+
+/* This makes the number for the current real-world date stand out */
+.today-bold {
+    font-weight: 900 !important; /* Extra thick font */
+    text-decoration: underline;  /* Adds an underline for extra clarity */
+    color: #000;                 /* Ensures it's solid black (or choose a color) */
+}
