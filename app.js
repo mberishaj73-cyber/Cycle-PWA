@@ -9,6 +9,10 @@ let accessToken = null;
 window.onload = () => {
     console.log("App and Google Script loading...");
     
+    // Start the Calendar
+    renderWeek();
+    updateStatus();
+
     try {
         tokenClient = google.accounts.oauth2.initTokenClient({
             client_id: CLIENT_ID,
@@ -27,9 +31,6 @@ window.onload = () => {
     } catch (err) {
         console.error("Google Auth failed to load:", err);
     }
-    
-    // IF YOU HAVE OTHER window.onload LOGIC (like initCalendar), CALL IT HERE:
-    // initCalendar(); 
 };
 
 // 3. The Login Trigger
@@ -259,16 +260,3 @@ function findEstimatedOvulation() {
     // Logic to find the CD14 or LH Peak
     return null; // Placeholder
 }
-
-window.onload = renderWeek;
-
-
-
-
-
-
-
-
-
-
-
