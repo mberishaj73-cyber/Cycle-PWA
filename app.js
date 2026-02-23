@@ -1,3 +1,46 @@
+const CLIENT_ID = '820836930929-cf5i8cqness3pso17ur404d755qsm4nj.apps.googleusercontent.com';
+const SCOPES = 'https://www.googleapis.com/auth/drive.appdata';
+let tokenClient;
+let accessToken = null;
+
+window.onload = () => {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: (tokenResponse) => {
+            accessToken = tokenResponse.access_token;
+            document.getElementById('sync-status').innerHTML = "Cloud Sync: <span>Active</span>";
+            document.getElementById('auth-btn').style.display = "none";
+            saveToDrive();
+        },
+    });
+};
+
+function handleAuthClick() {
+    tokenClient.requestAccessToken({prompt: 'consent'});
+}
+
+async function saveToDrive() {
+    if (!accessToken) return;
+    const metadata = { name: 'cycle_data_backup.json', parents: ['appDataFolder'] };
+    const data = localStorage.getItem('cycleData');
+    const file = new Blob([data], {type: 'application/json'});
+    const form = new FormData();
+    form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
+    form.append('file', file);
+    try {
+        const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+            method: 'POST',
+            headers: new Headers({'Authorization': 'Bearer ' + accessToken}),
+            body: form
+        });
+        if (response.ok) {
+            const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('sync-status').innerHTML = `Cloud Sync: <span>Updated ${now}</span>`;
+        }
+    } catch (err) { console.error("Sync failed", err); }
+}
+
 let currentViewDate = new Date();
 let selectedDate = new Date();
 let userData = JSON.parse(localStorage.getItem('cycleData')) || { dailyLogs: {}, history: [] };
@@ -188,6 +231,7 @@ function findEstimatedOvulation() {
 }
 
 window.onload = renderWeek;
+
 
 
 
