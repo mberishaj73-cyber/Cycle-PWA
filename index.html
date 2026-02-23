@@ -26,12 +26,59 @@
         <hr class="divider">
 
         <section id="day-details">
-            <h3 id="selected-date-label">Today</h3>
-            <div class="log-grid">
-                <button class="log-btn" onclick="logSymptom('period')">Toggle Period</button>
-                <button class="log-btn" onclick="logSymptom('lh')">Positive LH</button>
-                <button class="log-btn" onclick="logSymptom('temp')">Temp Rise</button>
-                <button class="log-btn" onclick="logSymptom('pdg')">Positive PdG</button>
+            <div class="action-card">
+                <p><strong>To Do:</strong> <span id="todo-item">None</span></p>
+                <p><strong>Prediction:</strong> <span id="prediction-text">--</span></p>
+            </div>
+        
+            <div class="log-container">
+                <div class="log-row">
+                    <span>Period:</span>
+                    <div class="btn-group">
+                        <button onclick="logVal('period', true)">Yes</button>
+                        <button onclick="logVal('period', false)">No</button>
+                    </div>
+                </div>
+        
+                <div class="log-row">
+                    <span>Lh Test:</span>
+                    <div class="btn-group">
+                        <button onclick="logVal('lh', 'pos')">Pos</button>
+                        <button onclick="logVal('lh', 'neg')">Neg</button>
+                    </div>
+                </div>
+        
+                <div class="log-row">
+                    <span>Clearblue:</span>
+                    <div class="btn-group">
+                        <button onclick="logVal('cb', 'none')">◯</button>
+                        <button onclick="logVal('cb', 'peak')">☺</button>
+                        <button onclick="logVal('cb', 'high')">☼</button>
+                    </div>
+                </div>
+        
+                <div class="log-row">
+                    <span>PdG:</span>
+                    <div class="btn-group">
+                        <button onclick="logVal('pdg', 'pos')">Pos</button>
+                        <button onclick="logVal('pdg', 'neg')">Neg</button>
+                    </div>
+                </div>
+        
+                <div class="log-row">
+                    <span>Temp:</span>
+                    <input type="number" id="temp-input" step="0.01" placeholder="98.60" onchange="logVal('temp', this.value)">
+                </div>
+        
+                <div class="log-row">
+                    <span>CM:</span>
+                    <select onchange="logVal('cm', this.value)" id="cm-select">
+                        <option value="none">None</option>
+                        <option value="watery">Watery</option>
+                        <option value="creamy">Creamy</option>
+                        <option value="spotting">Spotting</option>
+                    </select>
+                </div>
             </div>
         </section>
     </div>
@@ -46,3 +93,4 @@
     </script>
 </body>
 </html>
+
