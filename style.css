@@ -1,15 +1,50 @@
 :root {
     --dark-pink: #d63384;
+    --soft-pink: #ff85a2;
     --fertile-blue: #007bff;
+    --light-blue: #7dd3fc;
     --light-grey: #e9ecef;
+    --bg-color: #fff5f7;
 }
 
-/* Calendar Week View */
+body {
+    font-family: -apple-system, sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+#app {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--soft-pink);
+    padding: 10px;
+}
+
+/* Week View Grid */
 .week-container {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    margin-top: 10px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .day-cell {
@@ -17,28 +52,49 @@
     flex-direction: column;
     align-items: center;
     padding: 10px 0;
-    cursor: pointer;
+    border-radius: 15px;
+    transition: background 0.2s;
+}
+
+.day-letter { font-size: 0.7rem; color: #888; margin-bottom: 4px; }
+.today-label { color: var(--dark-pink); font-weight: 900; }
+
+.day-number {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    border-radius: 50%;
+    margin-bottom: 4px;
     position: relative;
 }
 
-.day-letter { font-size: 0.7rem; color: #888; text-transform: uppercase; }
-.today-label { font-size: 0.6rem; color: var(--dark-pink); font-weight: 800; }
-.day-number { 
-    font-size: 1.1rem; 
-    width: 30px; 
-    height: 30px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border-radius: 50%;
-    margin: 5px 0;
-}
+/* Special Logic Markers */
+.bold { font-weight: 800; }
+.selected { background-color: var(--light-grey) !important; }
+.fertile-number { color: var(--fertile-blue); font-weight: bold; }
+
+/* Circles */
+.predicted-ovulation { border: 2px dashed var(--fertile-blue); }
+.confirmed-ovulation { background-color: var(--fertile-blue) !important; color: white !important; }
+.predicted-period { border: 2px dashed var(--dark-pink); }
+.confirmed-period { background-color: var(--dark-pink) !important; color: white !important; }
+
 .cycle-day { font-size: 0.6rem; color: #aaa; }
 
-/* Status Styles */
-.selected { background-color: var(--light-grey); }
-.fertile { color: var(--fertile-blue); font-weight: bold; }
-.predicted-ovulation { border: 2px dashed var(--fertile-blue); }
-.confirmed-ovulation { background-color: var(--fertile-blue); color: white; }
-.predicted-period { border: 2px dashed var(--dark-pink); }
-.confirmed-period { background-color: var(--dark-pink); color: white; }
+/* Buttons */
+.log-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.log-btn {
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    background: white;
+    font-size:
