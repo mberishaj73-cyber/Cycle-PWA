@@ -159,19 +159,21 @@ function logVal(field, val) {
     const key = selectedDate.toISOString().split('T')[0];
     if (!userData.dailyLogs[key]) userData.dailyLogs[key] = {};
     
-    // Check if we are clicking the same value that's already saved
-    if (userData.dailyLogs[key][field] === val) {
-        // If yes, delete the data (unclick)
+    // Get the current value stored in the phone's memory
+    const currentValue = userData.dailyLogs[key][field];
+
+    // If what we clicked is EXACTLY what is already there, remove it
+    if (currentValue === val) {
         delete userData.dailyLogs[key][field];
     } else {
-        // If no, save the new value
+        // Otherwise, save the new value
         userData.dailyLogs[key][field] = val;
     }
     
     localStorage.setItem('cycleData', JSON.stringify(userData));
     
-    renderWeek();   // Refresh the calendar circles
-    updateStatus(); // Refresh the button highlights
+    renderWeek();   
+    updateStatus(); 
 }
 
 function hasThreePositivePdg() {
@@ -185,6 +187,7 @@ function findEstimatedOvulation() {
 }
 
 window.onload = renderWeek;
+
 
 
 
