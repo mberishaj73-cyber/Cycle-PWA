@@ -159,11 +159,19 @@ function logVal(field, val) {
     const key = selectedDate.toISOString().split('T')[0];
     if (!userData.dailyLogs[key]) userData.dailyLogs[key] = {};
     
-    userData.dailyLogs[key][field] = val;
+    // Check if we are clicking the same value that's already saved
+    if (userData.dailyLogs[key][field] === val) {
+        // If yes, delete the data (unclick)
+        delete userData.dailyLogs[key][field];
+    } else {
+        // If no, save the new value
+        userData.dailyLogs[key][field] = val;
+    }
+    
     localStorage.setItem('cycleData', JSON.stringify(userData));
     
-    renderWeek();   // Refreshes the calendar circles
-    updateStatus(); // Refreshes the button colors
+    renderWeek();   // Refresh the calendar circles
+    updateStatus(); // Refresh the button highlights
 }
 
 function hasThreePositivePdg() {
@@ -177,6 +185,7 @@ function findEstimatedOvulation() {
 }
 
 window.onload = renderWeek;
+
 
 
 
