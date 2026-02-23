@@ -46,6 +46,8 @@ function renderWeek() {
         const dateKey = day.toISOString().split('T')[0];
         // Check if this specific day is the one the user clicked
         const isSelected = day.toDateString() === selectedDate.toDateString();
+        // Check if this specific day is actually "Today" on the real-world calendar
+        const isToday = day.toDateString() === new Date().toDateString();
         
         // Create the HTML "Box" for this day
         const dayCell = document.createElement('div');
@@ -194,3 +196,4 @@ function downloadBackup() {
     a.download = `cycle_backup.json`;
     a.click();
 }
+
