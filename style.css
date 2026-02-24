@@ -183,7 +183,7 @@ input[type="number"] {
 #selected-date-display {
     font-weight: bold;
     font-size: 1.2rem; /* Optional: slightly larger to make it a clear header */
-    margin-top: 30px; /* Adds a little space before the selected date is listed */
+    margin-top: 15px; /* Adds a little space before the selected date is listed */
     margin-bottom: 15px; /* Adds a little space before the calendar starts */
     color: #333; /* A dark grey for better readability */
 }
