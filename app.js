@@ -123,48 +123,46 @@ function changeWeek(dir) {
 }
 
 // Handles saving data (Period, LH, etc.) when a button is clicked
-function logVal(key, val) {
-    const dateStr = selectedDate.toISOString().split('T')[0];
-    if (!userData.dailyLogs[dateStr]) userData.dailyLogs[dateStr] = {};
-
-    if (userData.dailyLogs[dateStr][key] === val) {
-        delete userData.dailyLogs[dateStr][key]; // Toggle off
+function logVal(field, val) {
+    const key = selectedDate.toISOString().split('T')[0];
+    if (!userData.dailyLogs[key]) userData.dailyLogs[key] = {};
+    // If user clicks an active button, delete the data (Toggle off)
+    if (userData.dailyLogs[key][field] === val) {
+        delete userData.dailyLogs[key][field];
     } else {
-        userData.dailyLogs[dateStr][key] = val; // Toggle on
+        // Otherwise, save the new value (Toggle on)
+        userData.dailyLogs[key][field] = val;
     }
-
-    saveData();
-    renderWeek();
-    updateStatus(); // This triggers the pink highlights
+    // Permanently save to the phone's memory
+    localStorage.setItem('cycleData', JSON.stringify(userData));
+    // Refresh the screen to show the new data
+    renderWeek();   
+    updateStatus();
 }
 
 // Updates the buttons and inputs to reflect what is saved for the selected day
 function updateStatus() {
-    const dateStr = selectedDate.toISOString().split('T')[0];
-    const log = userData.dailyLogs[dateStr] || {};
-    // 1. Clear ALL active classes first
-    document.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-    // 2. PERIOD (Yes/No)
+    const dateKey = selectedDate.toISOString().split('T')[0];
+    const log = userData.dailyLogs[dateKey] || {};
+    // Turn off the "Active" look for all buttons
+    document.querySelectorAll('.btn-group button').forEach(btn => btn.classList.remove('active'));
+
+    // If data exists, turn on the "Active" look for the specific buttons
     if (log.period === 'yes') document.querySelector('button[onclick*="period\', \'yes\'"]')?.classList.add('active');
     if (log.period === 'no') document.querySelector('button[onclick*="period\', \'no\'"]')?.classList.add('active');
-    // 3. LH (Pos/Neg)
     if (log.lh === 'pos') document.querySelector('button[onclick*="lh\', \'pos\'"]')?.classList.add('active');
     if (log.lh === 'neg') document.querySelector('button[onclick*="lh\', \'neg\'"]')?.classList.add('active');
-    // 4. PDG (Pos/Neg)
-    if (log.pdg === 'pos') document.querySelector('button[onclick*="pdg\', \'pos\'"]')?.classList.add('active');
-    if (log.pdg === 'neg') document.querySelector('button[onclick*="pdg\', \'neg\'"]')?.classList.add('active');
-    // 5. CLEARBLUE (None/High/Peak)
     if (log.cb === 'none') document.querySelector('button[onclick*="cb\', \'none\'"]')?.classList.add('active');
     if (log.cb === 'high') document.querySelector('button[onclick*="cb\', \'high\'"]')?.classList.add('active');
     if (log.cb === 'peak') document.querySelector('button[onclick*="cb\', \'peak\'"]')?.classList.add('active');
-    // 6. Update Temperature
+    if (log.pdg === 'pos') document.querySelector('button[onclick*="pdg\', \'pos\'"]')?.classList.add('active');
+    if (log.pdg === 'neg') document.querySelector('button[onclick*="pdg\', \'neg\'"]')?.classList.add('active');
+
+    // Update the text input and dropdown
     const tempInput = document.getElementById('temp-input');
+    const cmSelect = document.getElementById('cm-select');
     if (tempInput) tempInput.value = log.temp || '';
-    // 7. Cervical Mucus (CM)
-    if (log.cm === 'dry') document.querySelector('button[onclick*="cm\', \'dry\'"]')?.classList.add('active');
-    if (log.cm === 'sticky') document.querySelector('button[onclick*="cm\', \'sticky\'"]')?.classList.add('active');
-    if (log.cm === 'creamy') document.querySelector('button[onclick*="cm\', \'creamy\'"]')?.classList.add('active');
-    if (log.cm === 'egg') document.querySelector('button[onclick*="cm\', \'egg\'"]')?.classList.add('active');
+    if (cmSelect) cmSelect.value = log.cm || 'none';
 }
 
 // --- 4. DATA EXPORT ---
@@ -199,6 +197,7 @@ function downloadBackup() {
     a.download = `cycle_backup.json`;
     a.click();
 }
+
 
 
 
