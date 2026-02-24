@@ -145,17 +145,24 @@ function updateStatus() {
     const dateKey = selectedDate.toISOString().split('T')[0];
     const log = userData.dailyLogs[dateKey] || {};
     
-    // Turn off the "Active" look for all buttons
-    document.querySelectorAll('.btn-group button').forEach(btn => btn.classList.remove('active'));
-
-    // If data exists, turn on the "Active" look for the specific buttons
-    if (log.period === 'yes') document.querySelector('button[onclick*="period\', \'yes\'"]')?.classList.add('active');
-    if (log.period === 'no') document.querySelector('button[onclick*="period\', \'no\'"]')?.classList.add('active');
-    if (log.lh === 'pos') document.querySelector('button[onclick*="lh\', \'pos\'"]')?.classList.add('active');
-    if (log.lh === 'neg') document.querySelector('button[onclick*="lh\', \'neg\'"]')?.classList.add('active');
-    if (log.pdg) {document.querySelector(`button[onclick*="pdg', '${log.pdg}'"]`)?.classList.add('active');}
-    if (log.clearblue) {document.querySelector(`button[onclick*="clearblue', '${log.clearblue}'"]`)?.classList.add('active');}
-
+    // Reset all buttons to grey first
+    document.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+    // Highlight Period
+    if (log.period) {
+        document.querySelector(`button[onclick*="period', '${log.period}'"]`)?.classList.add('active');
+    }
+    // Highlight LH
+    if (log.lh) {
+        document.querySelector(`button[onclick*="lh', '${log.lh}'"]`)?.classList.add('active');
+    }
+    // Highlight Clearblue (cb)
+    if (log.cb) {
+        document.querySelector(`button[onclick*="cb', '${log.cb}'"]`)?.classList.add('active');
+    }
+    // Highlight PdG
+    if (log.pdg) {
+        document.querySelector(`button[onclick*="pdg', '${log.pdg}'"]`)?.classList.add('active');
+    }
     // Update the text input and dropdown
     const tempInput = document.getElementById('temp-input');
     const cmSelect = document.getElementById('cm-select');
@@ -195,6 +202,7 @@ function downloadBackup() {
     a.download = `cycle_backup.json`;
     a.click();
 }
+
 
 
 
