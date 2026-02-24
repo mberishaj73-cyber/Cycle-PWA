@@ -156,7 +156,8 @@ function updateStatus() {
     if (log.period === 'no') document.querySelector('button[onclick*="period\', \'no\'"]')?.classList.add('active');
     if (log.lh === 'pos') document.querySelector('button[onclick*="lh\', \'pos\'"]')?.classList.add('active');
     if (log.lh === 'neg') document.querySelector('button[onclick*="lh\', \'neg\'"]')?.classList.add('active');
-    // ... repeat this logic for other buttons if needed ...
+    if (log.pdg) {document.querySelector(`button[onclick*="pdg', '${log.pdg}'"]`)?.classList.add('active');}
+    if (log.clearblue) {document.querySelector(`button[onclick*="clearblue', '${log.clearblue}'"]`)?.classList.add('active');}
 
     // Update the text input and dropdown
     const tempInput = document.getElementById('temp-input');
@@ -197,5 +198,6 @@ function downloadBackup() {
     a.download = `cycle_backup.json`;
     a.click();
 }
+
 
 
