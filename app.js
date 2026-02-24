@@ -127,16 +127,15 @@ function logVal(key, val) {
     const dateStr = selectedDate.toISOString().split('T')[0];
     if (!userData.dailyLogs[dateStr]) userData.dailyLogs[dateStr] = {};
 
-    // Toggle logic: if clicking the same value again, remove it
     if (userData.dailyLogs[dateStr][key] === val) {
-        delete userData.dailyLogs[dateStr][key];
+        delete userData.dailyLogs[dateStr][key]; // Toggle off
     } else {
-        userData.dailyLogs[dateStr][key] = val;
+        userData.dailyLogs[dateStr][key] = val; // Toggle on
     }
 
     saveData();
     renderWeek();
-    updateStatus(); // This refreshes the buttons immediately
+    updateStatus(); // This triggers the pink highlights
 }
 
 // Updates the buttons and inputs to reflect what is saved for the selected day
@@ -200,6 +199,7 @@ function downloadBackup() {
     a.download = `cycle_backup.json`;
     a.click();
 }
+
 
 
 
