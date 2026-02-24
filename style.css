@@ -134,8 +134,8 @@ body {
 .btn-group button.active {
     background-color: #555 !important; 
     color: white !important;
-    border-color: #333;
-    font-weight: bold;
+    border-color: #333 !important;
+    font-weight: bold !important;
 }
 
 input[type="number"] {
