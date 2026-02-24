@@ -127,47 +127,46 @@ function logVal(key, val) {
     const dateStr = selectedDate.toISOString().split('T')[0];
     if (!userData.dailyLogs[dateStr]) userData.dailyLogs[dateStr] = {};
 
-    // If the value clicked is already the saved value, clear it (Toggle Off)
+    // Toggle logic: if clicking the same value again, remove it
     if (userData.dailyLogs[dateStr][key] === val) {
         delete userData.dailyLogs[dateStr][key];
     } else {
-        // Otherwise, save the new value (Toggle On)
         userData.dailyLogs[dateStr][key] = val;
     }
 
     saveData();
     renderWeek();
-    updateStatus();
+    updateStatus(); // This refreshes the buttons immediately
 }
 
 // Updates the buttons and inputs to reflect what is saved for the selected day
 function updateStatus() {
-    const dateKey = selectedDate.toISOString().split('T')[0];
-    const log = userData.dailyLogs[dateKey] || {};
-    
-    // Reset all buttons to grey first
-    document.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-    // Highlight Period
-    if (log.period) {
-        document.querySelector(`button[onclick*="period', '${log.period}'"]`)?.classList.add('active');
-    }
-    // Highlight LH
-    if (log.lh) {
-        document.querySelector(`button[onclick*="lh', '${log.lh}'"]`)?.classList.add('active');
-    }
-    // Highlight Clearblue (cb)
-    if (log.cb) {
-        document.querySelector(`button[onclick*="cb', '${log.cb}'"]`)?.classList.add('active');
-    }
-    // Highlight PdG
-    if (log.pdg) {
-        document.querySelector(`button[onclick*="pdg', '${log.pdg}'"]`)?.classList.add('active');
-    }
-    // Update the text input and dropdown
+    const dateStr = selectedDate.toISOString().split('T')[0];
+    const log = userData.dailyLogs[dateStr] || {};
+
+    // Remove the pink color from all buttons first
+    document.querySelectorAll('.btn-group button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // Helper to find and highlight buttons based on your HTML
+    const setButtonActive = (key, value) => {
+        if (!value) return;
+        // This looks for buttons containing exactly the key and value in the onclick
+        const selector = `button[onclick*="'${key}'"][onclick*="'${value}'"]`;
+        const btn = document.querySelector(selector);
+        if (btn) btn.classList.add('active');
+    };
+
+    // Apply the highlight to each category
+    setButtonActive('period', log.period);
+    setButtonActive('lh', log.lh);
+    setButtonActive('cb', log.cb);
+    setButtonActive('pdg', log.pdg);
+
+    // Temperature field
     const tempInput = document.getElementById('temp-input');
-    const cmSelect = document.getElementById('cm-select');
     if (tempInput) tempInput.value = log.temp || '';
-    if (cmSelect) cmSelect.value = log.cm || 'none';
 }
 
 // --- 4. DATA EXPORT ---
@@ -202,6 +201,7 @@ function downloadBackup() {
     a.download = `cycle_backup.json`;
     a.click();
 }
+
 
 
 
