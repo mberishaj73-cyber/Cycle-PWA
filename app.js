@@ -143,30 +143,29 @@ function logVal(key, val) {
 function updateStatus() {
     const dateStr = selectedDate.toISOString().split('T')[0];
     const log = userData.dailyLogs[dateStr] || {};
-
-    // Remove the pink color from all buttons first
-    document.querySelectorAll('.btn-group button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    // Helper to find and highlight buttons based on your HTML
-    const setButtonActive = (key, value) => {
-        if (!value) return;
-        // This looks for buttons containing exactly the key and value in the onclick
-        const selector = `button[onclick*="'${key}'"][onclick*="'${value}'"]`;
-        const btn = document.querySelector(selector);
-        if (btn) btn.classList.add('active');
-    };
-
-    // Apply the highlight to each category
-    setButtonActive('period', log.period);
-    setButtonActive('lh', log.lh);
-    setButtonActive('cb', log.cb);
-    setButtonActive('pdg', log.pdg);
-
-    // Temperature field
+    // 1. Clear ALL active classes first
+    document.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+    // 2. PERIOD (Yes/No)
+    if (log.period === 'yes') document.querySelector('button[onclick*="period\', \'yes\'"]')?.classList.add('active');
+    if (log.period === 'no') document.querySelector('button[onclick*="period\', \'no\'"]')?.classList.add('active');
+    // 3. LH (Pos/Neg)
+    if (log.lh === 'pos') document.querySelector('button[onclick*="lh\', \'pos\'"]')?.classList.add('active');
+    if (log.lh === 'neg') document.querySelector('button[onclick*="lh\', \'neg\'"]')?.classList.add('active');
+    // 4. PDG (Pos/Neg)
+    if (log.pdg === 'pos') document.querySelector('button[onclick*="pdg\', \'pos\'"]')?.classList.add('active');
+    if (log.pdg === 'neg') document.querySelector('button[onclick*="pdg\', \'neg\'"]')?.classList.add('active');
+    // 5. CLEARBLUE (None/High/Peak)
+    if (log.cb === 'none') document.querySelector('button[onclick*="cb\', \'none\'"]')?.classList.add('active');
+    if (log.cb === 'high') document.querySelector('button[onclick*="cb\', \'high\'"]')?.classList.add('active');
+    if (log.cb === 'peak') document.querySelector('button[onclick*="cb\', \'peak\'"]')?.classList.add('active');
+    // 6. Update Temperature
     const tempInput = document.getElementById('temp-input');
     if (tempInput) tempInput.value = log.temp || '';
+    // 7. Cervical Mucus (CM)
+    if (log.cm === 'dry') document.querySelector('button[onclick*="cm\', \'dry\'"]')?.classList.add('active');
+    if (log.cm === 'sticky') document.querySelector('button[onclick*="cm\', \'sticky\'"]')?.classList.add('active');
+    if (log.cm === 'creamy') document.querySelector('button[onclick*="cm\', \'creamy\'"]')?.classList.add('active');
+    if (log.cm === 'egg') document.querySelector('button[onclick*="cm\', \'egg\'"]')?.classList.add('active');
 }
 
 // --- 4. DATA EXPORT ---
@@ -201,6 +200,7 @@ function downloadBackup() {
     a.download = `cycle_backup.json`;
     a.click();
 }
+
 
 
 
