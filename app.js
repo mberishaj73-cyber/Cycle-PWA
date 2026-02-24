@@ -123,23 +123,20 @@ function changeWeek(dir) {
 }
 
 // Handles saving data (Period, LH, etc.) when a button is clicked
-function logVal(field, val) {
-    const key = selectedDate.toISOString().split('T')[0];
-    if (!userData.dailyLogs[key]) userData.dailyLogs[key] = {};
-    
-    // If user clicks an active button, delete the data (Toggle off)
-    if (userData.dailyLogs[key][field] === val) {
-        delete userData.dailyLogs[key][field];
+function logVal(key, val) {
+    const dateStr = selectedDate.toISOString().split('T')[0];
+    if (!userData.dailyLogs[dateStr]) userData.dailyLogs[dateStr] = {};
+
+    // If the value clicked is already the saved value, clear it (Toggle Off)
+    if (userData.dailyLogs[dateStr][key] === val) {
+        delete userData.dailyLogs[dateStr][key];
     } else {
-        // Otherwise, save the new value (Toggle on)
-        userData.dailyLogs[key][field] = val;
+        // Otherwise, save the new value (Toggle On)
+        userData.dailyLogs[dateStr][key] = val;
     }
-    
-    // Permanently save to the phone's memory
-    localStorage.setItem('cycleData', JSON.stringify(userData));
-    
-    // Refresh the screen to show the new data
-    renderWeek();   
+
+    saveData();
+    renderWeek();
     updateStatus();
 }
 
@@ -198,6 +195,7 @@ function downloadBackup() {
     a.download = `cycle_backup.json`;
     a.click();
 }
+
 
 
 
