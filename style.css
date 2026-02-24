@@ -178,3 +178,11 @@ input[type="number"] {
 .today-bold {
     font-weight: 900 !important; /* Extra thick font */
 }
+
+/* This makes the selected date header (e.g., Monday, February 23) bold */
+#selected-date-display {
+    font-weight: bold;
+    font-size: 1.2rem; /* Optional: slightly larger to make it a clear header */
+    margin-bottom: 15px; /* Adds a little space before the calendar starts */
+    color: #333; /* A dark grey for better readability */
+}
